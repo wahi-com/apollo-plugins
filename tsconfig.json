@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "lib": ["es5", "es6", "ESNext.String"],
+    "outDir": "lib",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "target": "esnext",
+    "allowJs": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "declaration": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "stripInternal": true,
+    "pretty": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "downlevelIteration": true,
+    "baseUrl": "./",
+    "typeRoots": ["types", "node_modules/@types"]
+  },
+  "exclude": [],
+  "include": [
+    "index.ts",
+    "src/**/*.ts"
+  ],
+}
