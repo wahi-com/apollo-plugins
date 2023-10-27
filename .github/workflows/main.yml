@@ -1,0 +1,29 @@
+name: Node CI
+
+on: [push, pull_request]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    container:
+      image: node:18
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: yarn install --network-concurrency 1
+
+  audit:
+    needs: setup
+    runs-on: ubuntu-latest
+    container:
+      image: node:18
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Audit Dependencies
+        run: yarn audit --groups dependencies --level critical

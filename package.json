@@ -1,0 +1,91 @@
+{
+  "name": "@wahi/apollo-plugins",
+  "version": "1.0.0",
+  "description": "Apollo plugins for Nest.js",
+  "keywords": [
+    "apollo",
+    "graphql",
+    "plugins",
+    "monitoring",
+    "datadog",
+    "nest",
+    "nestjs"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "author": "Wahi Inc",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:wahi-com/apollo-plugins.git"
+  },
+  "peerDependencies": {
+    "@apollo/gateway": "^2.5.6",
+    "@apollo/server": "^4.9.4",
+    "@nestjs/apollo": "^12.0.9",
+    "@nestjs/common": "^10.2.7",
+    "@nestjs/core": "^10.2.7",
+    "@nestjs/graphql": "^12.0.9",
+    "apollo-server-core": "^3.12.1",
+    "apollo-server-plugin-base": "^3.7.2",
+    "express-http-context": "^1.2.4",
+    "graphql": "^16.8.1",
+    "hot-shots": "^10.0.0",
+    "rxjs": "^7.8.1",
+    "ts-morph": "^20.0.0",
+    "typescript": "^4.8.4",
+    "winston": "^3.11.0"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "lint": "eslint 'src/**/*.ts'",
+    "test": "jest --runInBand --forceExit",
+    "compile": "tsc"
+  },
+  "devDependencies": {
+    "@apollo/gateway": "^2.5.6",
+    "@apollo/server": "^4.9.4",
+    "@nestjs/apollo": "^12.0.9",
+    "@nestjs/common": "^10.2.7",
+    "@nestjs/core": "^10.2.7",
+    "@nestjs/graphql": "^12.0.9",
+    "@types/jest": "^29.5.6",
+    "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "apollo-server-core": "^3.12.1",
+    "apollo-server-plugin-base": "^3.7.2",
+    "eslint": "^7.26.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "^27.2.3",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-watch": "^7.0.0",
+    "express-http-context": "^1.2.4",
+    "graphql": "^16.8.1",
+    "hot-shots": "^10.0.0",
+    "husky": "^8.0.3",
+    "jest": "^29.7.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1",
+    "ts-jest": "^29.1.1",
+    "ts-morph": "^20.0.0",
+    "typescript": "^4.8.4",
+    "winston": "^3.11.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ],
+    "coveragePathIgnorePatterns": [],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    }
+  }
+}
