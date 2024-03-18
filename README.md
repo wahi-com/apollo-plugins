@@ -19,6 +19,20 @@ yarn add @wahi/apollo-plugins
 ## Features
 
 - **DatadogNestPlugin**: Monitors and logs the number of GraphQL requests, tracks and logs the number of GraphQL errors, and logs request durations, highlighting slow requests.
+
+    - Request Metrics: Captures and increments a count of GraphQL requests, tagging them with relevant metadata for Datadog.
+    - Error Tracking: Increments an error count in Datadog when a GraphQL request encounters errors, again tagging with relevant metadata.
+    - Request Duration: Measures the duration of each GraphQL request, reporting the timing to Datadog. It also logs requests that exceed a specified slow threshold, providing detailed information such as operation type, operation name, variables, and user-agent.
+    - Environment Tagging: Automatically tags all metrics with the environment the application is running in, defaulting to 'unknown' if not specified.
+    - Slow Request Logging: Identifies slow GraphQL requests (taking more than 1000ms), logging detailed information to assist with debugging and performance optimization.
+
+- **QueryLoggerNestPlugin**: The QueryLoggerNestPlugin is a custom Apollo Server plugin designed to enhance logging capabilities for GraphQL requests. It captures and logs detailed information about each GraphQL request, including operation names, types, user IDs, and request IDs. Additionally, it logs errors encountered during the execution of GraphQL operations, providing insights into the nature and source of these errors. 
+
+    - Detailed Request Logging: Captures key details about GraphQL requests, such as operation name, operation type (query, mutation, subscription), user ID, and request ID.
+    - Error Logging: Logs errors encountered during GraphQL request execution, including error messages, paths, and stack traces. It differentiates between warning and error levels based on the nature of the error.
+    - Request Context Preservation: Utilizes express-http-context to maintain a request-scoped context, ensuring that logs can be correlated with specific request instances.
+    - Flexible Integration: Designed to work with both Apollo Server and NestJS, making it a versatile choice for a wide range of GraphQL applications.
+
 - _More plugins will be added in the future._
 
 ## Usage
