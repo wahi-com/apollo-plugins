@@ -1,6 +1,6 @@
 {
   "name": "@wahi/apollo-plugins",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Apollo plugins for Nest.js",
   "keywords": [
     "apollo",
