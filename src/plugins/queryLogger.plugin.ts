@@ -3,6 +3,7 @@ import { GraphQLRequestContext } from 'apollo-server-core';
 import httpContext from 'express-http-context';
 import logger from 'winston';
 import { Plugin } from '@nestjs/apollo';
+import { getExtractedInformationFromContext } from '../utils/getExtractedInformationFromContext.utils';
 
 interface GQLRequestData {
   operationName?: string | null,
@@ -21,9 +22,8 @@ const QueryLoggerPlugin: ApolloServerPlugin = {
 
     return {
       async executionDidStart(requestContext): Promise<void> {
-        const { operationName } = requestContext;
-        // `query`, `mutation` or `subscription`
-        const { operation: operationType } = requestContext.operation;
+
+        const { operationName, operationType } = getExtractedInformationFromContext(requestContext);
 
         const requestId = requestContext.request.http?.headers.get('x-request-id');
         logObj.operationName = operationName;
