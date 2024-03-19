@@ -12,10 +12,10 @@ jest.mock('../utils/getExtractedInformationFromContext.utils', () => ({
 }));
 
 jest.mock('express-http-context', () => {
-    return {
-        set: jest.fn(),
-        get: jest.fn(),
-    };
+  return {
+    set: jest.fn(),
+    get: jest.fn(),
+  };
 });
 
 jest.mock('winston', () => {
@@ -64,7 +64,7 @@ describe('DatadogPlugin', () => {
     const mockRequestContext = {} as any;
 
     if (DatadogPlugin.requestDidStart === undefined) {
-        throw new Error('requestDidStart is undefined');
+      throw new Error('requestDidStart is undefined');
     }
 
     const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener;
@@ -76,7 +76,7 @@ describe('DatadogPlugin', () => {
     const mockRequestContext = {} as any;
 
     if (DatadogPlugin.requestDidStart === undefined) {
-        throw new Error('requestDidStart is undefined');
+      throw new Error('requestDidStart is undefined');
     }
 
     const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener;
@@ -90,7 +90,7 @@ describe('DatadogPlugin', () => {
     jest.spyOn(Date, 'now').mockReturnValue(2000);
 
     if (DatadogPlugin.requestDidStart === undefined) {
-        throw new Error('requestDidStart is undefined');
+      throw new Error('requestDidStart is undefined');
     }
 
     const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener;

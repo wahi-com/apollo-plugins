@@ -3,58 +3,58 @@ import { getExtractedInformationFromContext } from './getExtractedInformationFro
 
 describe('getExtractedInformationFromContext', () => {
 
-    beforeAll(() => {
-        process.env.APP_NAME = 'app_name';
-    });
+  beforeAll(() => {
+    process.env.APP_NAME = 'app_name';
+  });
 
-    it('should extract information from context', () => {    
-        const mockContext: any = {
-            operation: {
-                operation: 'query',
+  it('should extract information from context', () => {    
+    const mockContext: any = {
+      operation: {
+        operation: 'query',
+      },
+      operationName: 'test_name',
+      document: {
+        definitions: [
+          {
+            kind: 'OperationDefinition',
+            name: {
+              value: 'test',
             },
-            operationName: 'test_name',
-            document: {
-                definitions: [
-                    {
-                        kind: 'OperationDefinition',
-                        name: {
-                            value: 'test',
-                        },
-                    },
-                ],
-            },
-            request: {
-                variables: {
-                    test: 'test',
-                },
-            },
-            context: {
-                req: {
-                    headers: {
-                        'user-agent': 'test',
-                    },
-                },
-            },
-        };
+          },
+        ],
+      },
+      request: {
+        variables: {
+          test: 'test',
+        },
+      },
+      context: {
+        req: {
+          headers: {
+            'user-agent': 'test',
+          },
+        },
+      },
+    };
 
-        const expected: any = {
-            operationType: 'query',
-            operationName: 'test_name',
-            operationApolloName: 'test',
-            datadogPrefix: `graphql.`,
-            variables: {
-                test: 'test',
-            },
-            userAgent: 'test',
-            tags: [
-            'app_name:app_name',
-            'operation:query.test_name',
-            'operation_apollo:query.test',
-            ],
-        };
+    const expected: any = {
+      operationType: 'query',
+      operationName: 'test_name',
+      operationApolloName: 'test',
+      datadogPrefix: `graphql.`,
+      variables: {
+        test: 'test',
+      },
+      userAgent: 'test',
+      tags: [
+        'app_name:app_name',
+        'operation:query.test_name',
+        'operation_apollo:query.test',
+      ],
+    };
 
-        const result = getExtractedInformationFromContext(mockContext);
+    const result = getExtractedInformationFromContext(mockContext);
 
-        expect(result).toEqual(expected);
-    });
+    expect(result).toEqual(expected);
+  });
 });
