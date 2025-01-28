@@ -15,7 +15,7 @@ jest.mock('winston', () => ({
 
 describe('QueryLoggerPlugin', () => {
   const mockContext = {
-    context: { user: { id: '123' } },
+    contextValue: { user: { id: '123' } },
     operation: { operation: OperationTypeNode.QUERY },
     request: { http: { headers: new Map([['x-request-id', 'abc-123']]) as any } },
   };

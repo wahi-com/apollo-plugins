@@ -1,6 +1,6 @@
-import { ApolloServerPlugin , GraphQLRequestListener } from 'apollo-server-plugin-base';
-import { GraphQLRequestContext } from 'apollo-server-core';
+import { ApolloServerPlugin, GraphQLRequestListener, GraphQLRequestContext } from '@apollo/server';
 import httpContext from 'express-http-context';
+import { PluginContext } from '../types/context.types';
 import logger from 'winston';
 import { Plugin } from '@nestjs/apollo';
 import { getExtractedInformationFromContext } from '../utils/getExtractedInformationFromContext.utils';
@@ -14,10 +14,10 @@ interface GQLRequestData {
 
 const QueryLoggerPlugin: ApolloServerPlugin = {
 
-  async requestDidStart(requestContext: GraphQLRequestContext): Promise<GraphQLRequestListener> {
+  async requestDidStart(requestContext: GraphQLRequestContext<PluginContext>): Promise<GraphQLRequestListener<PluginContext>> {
 
     const logObj: GQLRequestData = {
-      userId: requestContext.context.user?.id,
+      userId: requestContext.contextValue.user?.id,
     };
 
     return {
@@ -68,8 +68,8 @@ const QueryLoggerPlugin: ApolloServerPlugin = {
 
 @Plugin()
 export class QueryLoggerNestPlugin implements ApolloServerPlugin {
-  async requestDidStart(requestContext: GraphQLRequestContext): Promise<GraphQLRequestListener> {
-    const listener = await QueryLoggerPlugin.requestDidStart!(requestContext) as GraphQLRequestListener;
+  async requestDidStart(requestContext: GraphQLRequestContext<PluginContext>): Promise<GraphQLRequestListener<PluginContext>> {
+    const listener = await QueryLoggerPlugin.requestDidStart!(requestContext) as GraphQLRequestListener<PluginContext>;
 
     return listener;
   }

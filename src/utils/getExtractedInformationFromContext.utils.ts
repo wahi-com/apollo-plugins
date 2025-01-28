@@ -1,6 +1,7 @@
-import { GraphQLRequestContext } from 'apollo-server-core';
+import { GraphQLRequestContext } from '@apollo/server';
+import { PluginContext } from '../types/context.types';
 
-const getExtractedInformationFromContext = (requestContext: GraphQLRequestContext) => {
+const getExtractedInformationFromContext = (requestContext: GraphQLRequestContext<PluginContext>) => {
   const operationType = requestContext?.operation?.operation;
   const operationName = requestContext.operationName;
   
@@ -10,7 +11,7 @@ const getExtractedInformationFromContext = (requestContext: GraphQLRequestContex
     .join(',');
   
   const variables = requestContext.request?.variables;
-  const userAgent = requestContext.context?.req?.headers['user-agent'];
+  const userAgent = requestContext.contextValue?.req?.headers['user-agent'];
   
   return {
     operationType,
