@@ -1,5 +1,5 @@
 import { ApolloServerPlugin, GraphQLRequestListener, GraphQLRequestContext } from '@apollo/server';
-import httpContext from 'express-http-context';
+import httpContext from 'express-http-context2';
 import { PluginContext } from '../types/context.types';
 import { StatsD } from 'hot-shots';
 import logger from 'winston';

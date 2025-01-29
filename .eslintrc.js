@@ -7,16 +7,18 @@ module.exports = {
   ],
   env: {
     browser: true,
-    es6: true,
+    es2024: true,
     node: true
   },
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 'latest',
     sourceType: 'module',
+    project: 'tsconfig.json'
   },
   rules: {
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
     'indent': ['error', 2]
   },
+  root: true
 };

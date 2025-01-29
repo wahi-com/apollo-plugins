@@ -1,10 +1,10 @@
 import QueryLoggerPlugin from './queryLogger.plugin';
-import httpContext from 'express-http-context';
+import httpContext from 'express-http-context2';
 import logger from 'winston';
 import { OperationTypeNode } from 'graphql';
 
 // Mock external libraries
-jest.mock('express-http-context', () => ({
+jest.mock('express-http-context2', () => ({
   set: jest.fn(),
   get: jest.fn(),
 }));
