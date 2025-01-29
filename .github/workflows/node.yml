@@ -20,11 +20,10 @@ jobs:
     - name: Configure Node and Yarn
       run: |
         node --version
-        corepack enable
-        yarn set version classic
-        yarn config set nodeLinker node-modules
+        npm install -g yarn
+        yarn --version
     - name: Install Dependencies
-      run: yarn install --network-concurrency 1 --ignore-engines
+      run: yarn install --ignore-engines
     - name: Run Lint
       run: yarn lint
     - name: Run Tests
