@@ -6,7 +6,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     container:
-      image: node:18
+      image: node:22
 
     steps:
       - name: Checkout Code
@@ -19,7 +19,7 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     container:
-      image: node:18
+      image: node:22
 
     steps:
       - name: Checkout Code
