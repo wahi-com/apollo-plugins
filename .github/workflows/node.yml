@@ -20,13 +20,14 @@ jobs:
     - name: Configure Node and Yarn
       run: |
         echo "Node.js version: $(node --version)"
-        npm install -g corepack
-        corepack enable
-        yarn set version 1.22.22
-        yarn config set nodeLinker node-modules
-        yarn config set ignore-engines true
+        npm install -g yarn@1.22.22
+        yarn --version
     - name: Install Dependencies
+      env:
+        NODE_VERSION: 22
       run: |
+        export PATH="/opt/hostedtoolcache/node/22.0.0/x64/bin:$PATH"
+        node --version
         yarn install --ignore-engines --network-concurrency 1
     - name: Run Lint
       run: yarn lint
