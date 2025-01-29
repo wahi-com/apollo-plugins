@@ -1,23 +1,34 @@
-import { GraphQLRequestListener } from '@apollo/server';
-import httpContext from 'express-http-context2';
-import { StatsD } from 'hot-shots';
+// First, all jest.mock calls
+const mockIncrement = jest.fn();
+const mockTiming = jest.fn();
 
-import DatadogPlugin from './datadog.plugin';
-import { PluginContext } from '../types/context.types';
+jest.mock('hot-shots', () => ({
+  StatsD: jest.fn().mockReturnValue({
+    increment: mockIncrement,
+    timing: mockTiming,
+  })
+}));
 
 jest.mock('../utils/getExtractedInformationFromContext.utils', () => ({
   getExtractedInformationFromContext: () => ({
-    datadogPrefix: 'prefix.',
-    tags: ['tag1', 'tag2'],  
+    operationType: 'query',
+    operationName: 'TestQuery',
+    operationApolloName: 'TestQuery',
+    datadogPrefix: 'graphql.',
+    variables: {},
+    userAgent: 'test-agent',
+    tags: [
+      'app_name:test-app',
+      'operation:query.TestQuery',
+      'operation_apollo:query.TestQuery',
+    ],
   }),
 }));
 
-jest.mock('express-http-context2', () => {
-  return {
-    set: jest.fn(),
-    get: jest.fn(),
-  };
-});
+jest.mock('express-http-context2', () => ({
+  set: jest.fn(),
+  get: jest.fn(),
+}));
 
 jest.mock('winston', () => {
   const mLogger = {
@@ -32,7 +43,7 @@ jest.mock('winston', () => {
       printf: jest.fn(),
     },
     transports: {
-      Console: jest.fn(), // Mock the Console transport
+      Console: jest.fn(),
     },
     loggers: {
       get: jest.fn(() => mLogger),
@@ -40,25 +51,24 @@ jest.mock('winston', () => {
   };
 });
 
-jest.mock('hot-shots');
+// Then imports
+import { GraphQLRequestListener } from '@apollo/server';
+import httpContext from 'express-http-context2';
+import DatadogPlugin from './datadog.plugin';
+import { PluginContext } from '../types/context.types';
+
+// Then test setup
+const OLD_ENV = process.env;
 
 describe('DatadogPlugin', () => {
-  let statsDIncrementSpy: jest.SpyInstance;
-  let statsDTimingSpy: jest.SpyInstance;
-
   beforeEach(() => {
-
-    (StatsD as jest.Mock).mockImplementation(() => ({
-      increment: jest.fn(),
-      timing: jest.fn(),
-    }));
-
-    statsDIncrementSpy = jest.spyOn(StatsD.prototype, 'increment');
-    statsDTimingSpy = jest.spyOn(StatsD.prototype, 'timing');
+    jest.resetModules();
+    process.env = { ...OLD_ENV, APP_NAME: 'test-app' };
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    process.env = OLD_ENV;
   });
 
   it('should increment requests.count on executionDidStart', async () => {
@@ -70,7 +80,11 @@ describe('DatadogPlugin', () => {
 
     const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener<PluginContext>;
     await listener.executionDidStart!(mockRequestContext);
-    expect(statsDIncrementSpy).toHaveBeenCalledWith('prefix.requests.count', 1, 1, ['tag1', 'tag2']);
+    expect(mockIncrement).toHaveBeenCalledWith('graphql.requests.count', 1, 1, [
+      'app_name:test-app',
+      'operation:query.TestQuery',
+      'operation_apollo:query.TestQuery'
+    ]);
   });
 
   it('should increment errors.count on didEncounterErrors', async () => {
@@ -82,7 +96,11 @@ describe('DatadogPlugin', () => {
 
     const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener<PluginContext>;
     await listener.didEncounterErrors!(mockRequestContext);
-    expect(statsDIncrementSpy).toHaveBeenCalledWith('prefix.errors.count', 1, 1, ['tag1', 'tag2']);
+    expect(mockIncrement).toHaveBeenCalledWith('graphql.errors.count', 1, 1, [
+      'app_name:test-app',
+      'operation:query.TestQuery',
+      'operation_apollo:query.TestQuery'
+    ]);
   });
 
   it('should log request duration on willSendResponse', async () => {
@@ -96,7 +114,10 @@ describe('DatadogPlugin', () => {
 
     const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener<PluginContext>;
     await listener.willSendResponse!(mockRequestContext);
-    expect(statsDTimingSpy).toHaveBeenCalledWith('prefix.requests.duration', 1000, ['tag1', 'tag2']);
+    expect(mockTiming).toHaveBeenCalledWith('graphql.requests.duration', 1000, [
+      'app_name:test-app',
+      'operation:query.TestQuery',
+      'operation_apollo:query.TestQuery'
+    ]);
   });
-
 });

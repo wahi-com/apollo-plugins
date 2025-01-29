@@ -4,7 +4,7 @@
     "outDir": "lib",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "target": "esnext",
+    "target": "es2022",
     "allowJs": true,
     "module": "commonjs",
     "moduleResolution": "node",
