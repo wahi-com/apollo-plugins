@@ -1,6 +1,6 @@
-import { ApolloServerPlugin, GraphQLRequestListener } from 'apollo-server-plugin-base';
-import { GraphQLRequestContext } from 'apollo-server-core';
-import httpContext from 'express-http-context';
+import { ApolloServerPlugin, GraphQLRequestListener, GraphQLRequestContext } from '@apollo/server';
+import httpContext from 'express-http-context2';
+import { PluginContext } from '../types/context.types';
 import { StatsD } from 'hot-shots';
 import logger from 'winston';
 
@@ -15,9 +15,9 @@ const statsD = new StatsD({
 const SLOW_THRESHOLD = 1000;
 
 const DatadogPlugin: ApolloServerPlugin = {
-  async requestDidStart(): Promise<GraphQLRequestListener> {
+  async requestDidStart(): Promise<GraphQLRequestListener<PluginContext>> {
     return {
-      async executionDidStart(requestContext: GraphQLRequestContext): Promise<void> {
+      async executionDidStart(requestContext: GraphQLRequestContext<PluginContext>): Promise<void> {
         httpContext.set('requestStartTimestamp', Date.now());
 
         const { datadogPrefix, tags } = getExtractedInformationFromContext(requestContext);
@@ -29,7 +29,7 @@ const DatadogPlugin: ApolloServerPlugin = {
 
         statsD.increment(`${datadogPrefix}errors.count`, 1, 1, tags);
       },
-      async willSendResponse(requestContext: GraphQLRequestContext): Promise<void> {
+      async willSendResponse(requestContext: GraphQLRequestContext<PluginContext>): Promise<void> {
         const requestDuration = Date.now() - httpContext.get('requestStartTimestamp');
 
         const { datadogPrefix, tags, variables, userAgent, operationName, operationType } = getExtractedInformationFromContext(requestContext);
@@ -46,8 +46,8 @@ const DatadogPlugin: ApolloServerPlugin = {
 
 @Plugin()
 export class DatadogNestPlugin implements ApolloServerPlugin {
-  async requestDidStart(requestContext: GraphQLRequestContext): Promise<GraphQLRequestListener> {
-    const listener = await DatadogPlugin.requestDidStart!(requestContext) as GraphQLRequestListener;
+  async requestDidStart(requestContext: GraphQLRequestContext<PluginContext>): Promise<GraphQLRequestListener<PluginContext>> {
+    const listener = await DatadogPlugin.requestDidStart!(requestContext) as GraphQLRequestListener<PluginContext>;
 
     return listener;
   }

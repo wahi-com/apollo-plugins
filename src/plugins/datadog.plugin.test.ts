@@ -1,8 +1,9 @@
-import { GraphQLRequestListener } from 'apollo-server-plugin-base';
-import httpContext from 'express-http-context';
+import { GraphQLRequestListener } from '@apollo/server';
+import httpContext from 'express-http-context2';
 import { StatsD } from 'hot-shots';
 
 import DatadogPlugin from './datadog.plugin';
+import { PluginContext } from '../types/context.types';
 
 jest.mock('../utils/getExtractedInformationFromContext.utils', () => ({
   getExtractedInformationFromContext: () => ({
@@ -11,7 +12,7 @@ jest.mock('../utils/getExtractedInformationFromContext.utils', () => ({
   }),
 }));
 
-jest.mock('express-http-context', () => {
+jest.mock('express-http-context2', () => {
   return {
     set: jest.fn(),
     get: jest.fn(),
@@ -67,7 +68,7 @@ describe('DatadogPlugin', () => {
       throw new Error('requestDidStart is undefined');
     }
 
-    const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener;
+    const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener<PluginContext>;
     await listener.executionDidStart!(mockRequestContext);
     expect(statsDIncrementSpy).toHaveBeenCalledWith('prefix.requests.count', 1, 1, ['tag1', 'tag2']);
   });
@@ -79,7 +80,7 @@ describe('DatadogPlugin', () => {
       throw new Error('requestDidStart is undefined');
     }
 
-    const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener;
+    const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener<PluginContext>;
     await listener.didEncounterErrors!(mockRequestContext);
     expect(statsDIncrementSpy).toHaveBeenCalledWith('prefix.errors.count', 1, 1, ['tag1', 'tag2']);
   });
@@ -93,7 +94,7 @@ describe('DatadogPlugin', () => {
       throw new Error('requestDidStart is undefined');
     }
 
-    const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener;
+    const listener = (await DatadogPlugin.requestDidStart(mockRequestContext)) as GraphQLRequestListener<PluginContext>;
     await listener.willSendResponse!(mockRequestContext);
     expect(statsDTimingSpy).toHaveBeenCalledWith('prefix.requests.duration', 1000, ['tag1', 'tag2']);
   });

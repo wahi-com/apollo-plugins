@@ -28,7 +28,7 @@ describe('getExtractedInformationFromContext', () => {
           test: 'test',
         },
       },
-      context: {
+      contextValue: {
         req: {
           headers: {
             'user-agent': 'test',
