@@ -17,10 +17,10 @@ jobs:
       with:
         node-version: '22'
         cache: 'yarn'
+    - name: Configure Yarn
+      run: yarn config set nodeLinker node-modules
     - name: Install Dependencies
-      run: |
-        yarn config set nodeLinker node-modules
-        yarn install --network-concurrency 1 --ignore-engines
+      run: yarn install --network-concurrency 1 --ignore-engines
     - name: Run Lint
       run: yarn lint
     - name: Run Tests
