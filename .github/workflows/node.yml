@@ -18,7 +18,9 @@ jobs:
         node-version: '22'
         cache: 'yarn'
     - name: Install Dependencies
-      run: yarn install --network-concurrency 1
+      run: |
+        yarn config set nodeLinker node-modules
+        yarn install --network-concurrency 1 --ignore-engines
     - name: Run Lint
       run: yarn lint
     - name: Run Tests
