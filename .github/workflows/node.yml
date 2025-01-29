@@ -23,8 +23,12 @@ jobs:
         npm install -g yarn@1.22.22
         yarn --version
         yarn config set ignore-engines true
+        yarn config set network-timeout 300000
     - name: Install Dependencies
-      run: yarn install
+      run: |
+        export NODE_VERSION=$(node --version)
+        echo "Using Node.js version: $NODE_VERSION"
+        yarn install --ignore-engines --network-timeout 300000
     - name: Run Lint
       run: yarn lint
     - name: Run Tests
