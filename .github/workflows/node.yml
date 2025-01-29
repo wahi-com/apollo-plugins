@@ -20,10 +20,11 @@ jobs:
     - name: Configure Node and Yarn
       run: |
         node --version
-        npm install -g yarn
+        npm install -g yarn@1.22.22
         yarn --version
+        yarn config set ignore-engines true
     - name: Install Dependencies
-      run: yarn install --ignore-engines
+      run: yarn install
     - name: Run Lint
       run: yarn lint
     - name: Run Tests
