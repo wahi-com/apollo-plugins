@@ -17,13 +17,15 @@ jobs:
       with:
         node-version: '22'
         cache: 'yarn'
-    - name: Configure Yarn
+    - name: Configure Node and Yarn
       run: |
+        node --version
         corepack enable
         yarn set version stable
         yarn config set nodeLinker node-modules
+        yarn config set engines-policy ignore
     - name: Install Dependencies
-      run: yarn install --network-concurrency 1
+      run: yarn install --network-concurrency 1 --ignore-engines
     - name: Run Lint
       run: yarn lint
     - name: Run Tests
